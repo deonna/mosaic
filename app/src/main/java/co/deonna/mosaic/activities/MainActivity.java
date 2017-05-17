@@ -1,6 +1,12 @@
 package co.deonna.mosaic.activities;
 
 import android.annotation.TargetApi;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +17,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.bitmap.BitmapDecoder;
+import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
@@ -45,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(MainActivity.this);
 
         setDeviceDimensions();
-//        loadInitialImage();
-        createImageViews();
+        loadInitialImage();
+//        createImageViews();
     }
 
     private void setDeviceDimensions() {
@@ -73,6 +81,19 @@ public class MainActivity extends AppCompatActivity {
                     Log.d(TAG, String.format("Width: %d, Height: %d", width, height));
 
                     ivTargetPhoto.setImageDrawable(resource);
+
+                    Bitmap bitmap = ((GlideBitmapDrawable) resource).getBitmap();
+
+                    int pixel = bitmap.getPixel(1000, 1000);
+
+                    int red = Color.red(pixel);
+                    int green = Color.green(pixel);
+                    int blue = Color.blue(pixel);
+                    int alpha = Color.alpha(pixel);
+
+                    int color = Color.argb(alpha, red, green, blue);
+
+                    Log.d(TAG, String.format("Did it work? Color: %d, Red: %d Green: %d Blue: %d Alpha: %d", color, red, green, blue, alpha));
                 }
             });
     }
