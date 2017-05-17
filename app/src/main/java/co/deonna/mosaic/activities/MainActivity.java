@@ -26,6 +26,7 @@ import com.bumptech.glide.request.target.SimpleTarget;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import co.deonna.mosaic.R;
+import co.deonna.mosaic.models.ImageGrid;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 //    public static final int HEIGHT_DIVISOR = 32; // 77 total images
     public static final int WIDTH_DIVISOR = 200; // 45 total images
     public static final int HEIGHT_DIVISOR = 154; // 16 total images
+    private static final String TEST_IMAGE_URL = "http://static.pexels.com/photos/39517/rose-flower-blossom-bloom-39517.jpeg";
 
     public static int screenWidth;
     public static int screenHeight;
@@ -53,8 +55,10 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(MainActivity.this);
 
         setDeviceDimensions();
-        loadInitialImage();
-//        createImageViews();
+//        loadInitialImage();
+        createImageViews();
+
+        ImageGrid imageGrid = new ImageGrid(MainActivity.this, TEST_IMAGE_URL, screenWidth, screenHeight);
     }
 
     private void setDeviceDimensions() {
@@ -71,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
     private void loadInitialImage() {
 
         Glide.with(MainActivity.this)
-            .load("http://static.pexels.com/photos/39517/rose-flower-blossom-bloom-39517.jpeg")
+            .load(TEST_IMAGE_URL)
             .into(new SimpleTarget<GlideDrawable>() {
                 @Override
                 public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> glideAnimation) {
@@ -112,11 +116,19 @@ public class MainActivity extends AppCompatActivity {
                 RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(WIDTH_DIVISOR, HEIGHT_DIVISOR);
 
                 ImageView imageView = new ImageView(MainActivity.this);
+
                 imageView.setLayoutParams(layoutParams);
+
                 imageView.setX(x);
                 imageView.setY(y);
                 imageView.setMaxWidth(WIDTH_DIVISOR);
                 imageView.setMaxHeight(HEIGHT_DIVISOR);
+
+                Glide
+                    .with(this)
+                    .load(TEST_IMAGE_URL)
+                    .centerCrop()
+                    .into(imageView);
 
                 if (!alternateColor) {
                     imageView.setBackgroundColor(getResources().getColor(R.color.colorPrimary, getTheme()));
